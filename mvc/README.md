@@ -222,3 +222,8 @@ public class MappingController {
     }
 ```
 * @RequsetBody object objectName 으로 json을 객체로 변환하는 과정이 자동으로 일어난다.
+
+## 스프링에서 Http 응답 데이터를 만드는 방법
+1. 정적 리소스
+2. 뷰 템플릿 등을 활용한 동적 리소스
+3. http 메시지 - http api를 제공하기 위해 메시지 바디에 json 형태로 저장하여 보냄
