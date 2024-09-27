@@ -228,6 +228,8 @@ public class MappingController {
 2. 뷰 템플릿 등을 활용한 동적 리소스
 3. http 메시지 - http api를 제공하기 위해 메시지 바디에 json 형태로 저장하여 보냄
 
+## ⭐️@ResponseBody - return이 String일 때
+> ⭐view를 호출하지 않고 직접 message body에 입력 (Http 메시지 컨버터)
 ```
     @ResponseBody
     @GetMapping("sejkim2")
@@ -235,8 +237,9 @@ public class MappingController {
         return "ok";
     }
 ```
-* view를 사용하지 않고 직접 메시지 바디에 입력
 
+## ⭐️ResponseEntity<Object> - return이 Object일 때
+> Json 형태로 return (Http 메시지 컨버터)
 ```
     @GetMapping("sejkim2")
     public ResponseEntity<HelloData> responseBodyJsonTest() {
@@ -250,6 +253,7 @@ public class MappingController {
 * 객체를 json 형태로 보내고 싶을때 사용 (http 컨버터를 통해 객체가 json 형태로 변환되어서 반환됨)
 * 동적으로 http status를 설정할 수 있음
 
+## @ResponseBody - return이 Object일 때
 ```
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -264,6 +268,6 @@ public class MappingController {
 ```
 * @ResponseBody를 사용하여 쉽게 사용 가능하나 Http status가 동적으로 변하지 않는다.
 
-## @RestController
+## ⭐️@RestController
 * @Controller 대신 사용하게 되면 해당 컨트롤러에서 모두 @ResponseBody가 적용된다.
 * Rest API(HTTP API)를 만들 때 사용하는 컨트롤러
