@@ -31,6 +31,8 @@ db 회사는 위 세가지 표준 인터페이스를 기준으로 구현하며, 
 * SQL 문을 직접 작성해야 한다.
 
 2. ORM (Object Relational Mapping)
+
+<img width="557" alt="스크린샷 2024-10-06 오후 9 33 46" src="https://github.com/user-attachments/assets/8e13869e-5df5-4dd6-949e-b116cf71716b">
 > JPA
 
 * 객체와 관계형 데이터베이스 테이블을 매핑
