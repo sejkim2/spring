@@ -23,6 +23,7 @@ db 회사는 위 세가지 표준 인터페이스를 기준으로 구현하며, 
 1. SQL Mapper
 
 <img width="569" alt="스크린샷 2024-10-06 오후 9 29 39" src="https://github.com/user-attachments/assets/5a2597a5-33c2-4529-9a25-4f4a2bd20122">
+
 > JdbcTemplate
 > MyBatis
 
@@ -33,6 +34,7 @@ db 회사는 위 세가지 표준 인터페이스를 기준으로 구현하며, 
 2. ORM (Object Relational Mapping)
 
 <img width="557" alt="스크린샷 2024-10-06 오후 9 33 46" src="https://github.com/user-attachments/assets/8e13869e-5df5-4dd6-949e-b116cf71716b">
+
 > JPA
 
 * 객체와 관계형 데이터베이스 테이블을 매핑
