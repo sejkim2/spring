@@ -39,3 +39,84 @@ db 회사는 위 세가지 표준 인터페이스를 기준으로 구현하며, 
 
 * 객체와 관계형 데이터베이스 테이블을 매핑
 * SQL 문 작성 직접 작성 x (알아서 만들어준다.)
+
+## jdbc 사용
+
+1. 커넥션 연결 - connection
+<img width="570" alt="스크린샷 2024-10-07 오후 9 30 31" src="https://github.com/user-attachments/assets/ff09d84a-9f41-43fc-980f-d1f685f8416d">
+
+```
+public class DBConnectionUtil {
+    public static Connection getConnection() {
+        try {
+            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            return connection;
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+}
+```
+* DriverManager는 URL 정보를 처리할 수 있는 드라이버를 탐색하고 탐색 완료하면 그 드라이버로 데이터베이스에 연결하여 커넥션을 반환한다.
+
+2. sql 전달 - statement
+3. 쿼리 응답 - resultset
+```
+public Member save(Member member) throws SQLException {
+        String sql = "insert into member(member_id, money) values(?, ?)";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = DBConnectionUtil.getConnection();
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, member.getMemberId());  // ?가 value로 변환됨
+            pstmt.setInt(2, member.getMoney());
+            pstmt.executeUpdate();
+
+            return member;
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+```
+* String으로 된 sql 문을 statement에 넣어서 실제 sql 문으로 변환
+* sql injection 공격 (사용자가 입력 창에 sql문을 직접 넣는 공격)을 예방하기 위해 statement의 자식인 PrepardStatement를 사용하여 파라미터 바인딩 방식을 사용
+* setString(n, value) : String sql의 ?에 1부터 n까지 차례로 value로 매핑된다.
+* pstmt.executeUpdate : sql을 데이터베이스에 전달
+
+리소스 회수
+```
+private void close(Connection con, Statement stmt, ResultSet rs) {
+
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+    }
+```
+* close() 함수를 사용할 때 발생할 수 있는 예외 때문에 코드가 복잡해지는 단점이 있음
+
