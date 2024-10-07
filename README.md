@@ -87,7 +87,7 @@ public Member save(Member member) throws SQLException {
 * String으로 된 sql 문을 statement에 넣어서 실제 sql 문으로 변환
 * sql injection 공격 (사용자가 입력 창에 sql문을 직접 넣는 공격)을 예방하기 위해 statement의 자식인 PrepardStatement를 사용하여 파라미터 바인딩 방식을 사용
 * setString(n, value) : String sql의 ?에 1부터 n까지 차례로 value로 매핑된다.
-* pstmt.executeUpdate : sql을 데이터베이스에 전달
+* pstmt.executeUpdate() : sql을 데이터베이스에 전달 (데이터를 변경)
 
 리소스 회수
 ```
@@ -120,3 +120,35 @@ private void close(Connection con, Statement stmt, ResultSet rs) {
 ```
 * close() 함수를 사용할 때 발생할 수 있는 예외 때문에 코드가 복잡해지는 단점이 있음
 
+```
+public Member findById(String memberId) throws SQLException {
+        String sql = "select * from member where member_id = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = pstmt.getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+            
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Member member = new Member();
+                member.setMemberId(rs.getString("member_id"));
+                member.setMoney(rs.getInt("money"));
+                return member;
+            } else {
+                throw new NoSuchElementException("member not found memberId=" + memberId);
+            }
+            
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            close(con, pstmt, rs);
+        }
+    }
+```
+* pstmt.exeuteQuery() : 데이터를 조회하고 결과를 resultset에 담아서 반환
+ <img width="578" alt="스크린샷 2024-10-07 오후 9 55 35" src="https://github.com/user-attachments/assets/08f12d67-18c9-4476-98fe-ffd8d3bb4093">
